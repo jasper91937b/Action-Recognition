@@ -1,25 +1,19 @@
 from django.shortcuts import render, redirect
-import numpy as np
-import cv2
-
-# write the upload file to upload folder 
-def handle_uploaded_file(f):  
-    with open('myapp/static/upload/'+f.name, 'wb+') as destination:  
-        for chunk in f.chunks():  
-            destination.write(chunk)
-            
 from myapp.forms import UploadForm
+
 import sys
 import os
+import numpy as np
+import cv2
+import time
 
-# find Root and current path, add Root to path
+
+# 找出根目錄Realtime-Action-Recognition-master與目前工作目錄，把根目錄加到環境變數中
 ROOT = os.path.dirname(os.path.abspath(__file__)) + "/Realtime-Action-Recognition-master/"
 CURR_PATH = os.path.dirname(os.path.abspath(__file__))+ "/"
 sys.path.append(ROOT)
+sys.path.append(CURR_PATH)
 
-import time
-import numpy as np
-import cv2
 import utils.lib_images_io as lib_images_io
 import utils.lib_plot as lib_plot
 import utils.lib_commons as lib_commons
@@ -29,6 +23,13 @@ from utils.lib_classifier import ClassifierOnlineTest
 from utils.lib_classifier import *  # Import all sklearn related libraries
 from django.views.decorators.csrf import csrf_exempt # import for csrf
 
+
+
+# 將上傳的檔案寫入 static/upload
+def handle_uploaded_file(f):  
+    with open('myapp/static/upload/'+f.name, 'wb+') as destination:  
+        for chunk in f.chunks():  
+            destination.write(chunk)
 
 # init the global variable videoinput, show data in browser needed. 
 list_result = None
@@ -99,12 +100,10 @@ def predict(request):
 
     # Display 設定
     img_disp_desired_rows = int(cfg["settings"]["display"]["desired_rows"]) # 480
-
-    # -- Function
+    
+    # 多人動作偵測 ㄐecognizing actions of multiple people
     class MultiPersonClassifier(object):
         ''' 
-        This is a wrapper around ClassifierOnlineTest
-        for recognizing actions of multiple people.
         用於識別多人的動作。
         dict_id2clf => {id : ClassifierOnlineTest object}
         id2label => {id : predict action}
@@ -246,7 +245,6 @@ def predict(request):
             humans = skeleton_detector.detect(img)
             skeletons, scale_h = skeleton_detector.humans_to_skels_list(humans)
             # skeletons shape : (1, 36)
-            skeletons = skeletons
 
             # -- Track people
             # dict_id2skeleton => {id : skeletons}
@@ -262,15 +260,10 @@ def predict(request):
             # -- Draw
             img_disp = draw_result_img(img_disp, ith_img, humans, dict_id2skeleton,
                                         skeleton_detector, multiperson_classifier)
-        
-            # # Print label of a person
-            # if len(dict_id2skeleton):
-            #     min_id = min(dict_id2skeleton.keys())
-            #     print("prediced label is :", dict_id2label[min_id])
 
             # -- Display image, and write to video.avi
             img_displayer.display(img_disp, wait_key_ms=1)
-            video_writer.write(img_disp)
+            # video_writer.write(img_disp)
 
             # -- Get skeleton data and save to file
             skels_to_save = get_the_skeleton_data_to_save_to_disk(
@@ -306,8 +299,8 @@ def predict(request):
                 count_punch = dict_result[uid].count("punch")
                 count_sos = dict_result[uid].count("sos")
                 count_opendoor = dict_result[uid].count("opendoor")
+
                 if count_kick > 10 or count_punch > 10:
-                    # print(f"ALARM {uid}!")
                     status_a = True
                     lineNotifyMessage(msg="發現疑似違規行為")
                     dict_result[uid].clear()
@@ -316,7 +309,6 @@ def predict(request):
                 
                 if count_sos > 10:
                     status_h = True
-                    # print(f"SOS {uid}!")
                     lineNotifyMessage(msg="有人發出求救訊號")
                     dict_result[uid].clear()
                 else :
@@ -324,14 +316,12 @@ def predict(request):
                 
                 if count_opendoor > 10:
                     status_o = True
-                    # print(f"Check {uid}!")
                     dict_result[uid].clear()
                     lineNotifyMessage(msg="請檢查隨身物品是否攜帶")
-                    # return redirect("http://localhost:8000/item/up")
                 else :
                     status_o = False
-    
         return render(request,"main.html",{'form':upload })    
+
     except Exception as e:
         print(e)
     finally:
@@ -339,19 +329,12 @@ def predict(request):
         print("Program ends")
         list_result = None
 
-# show data in browser
+# 把資料顯示在網頁上
 from django.http import JsonResponse
-
 def send_data(request):
     result = list_result
-    # if status_h:
-    #     lineNotifyMessage(msg="有人發出求救訊號")
-    # if status_a:
-    #     lineNotifyMessage(msg="發現疑似違規行為")
-    # # if status_o:
-    # #     lineNotifyMessage(msg="請檢查隨身物品是否攜帶")
-    
     return JsonResponse({"data":result, "showa": status_a, "showh": status_h, "showo":status_o})
+
 
 
 import requests
