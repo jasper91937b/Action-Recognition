@@ -24,7 +24,7 @@ from tf_pose import common
 
 # -- Settings 設定
 MAX_FRACTION_OF_GPU_TO_USE = 0.4
-IS_DRAW_FPS = True
+IS_DRAW_FPS = False
 
 # -- Helper functions輔助功能
 # logging module，設定basicConfig

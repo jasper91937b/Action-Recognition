@@ -56,9 +56,9 @@ s5_test.py:
       video_sample_interval: 5
 
     openpose:
-      # model: mobilenet_thin
+      model: mobilenet_thin
       img_size: 656x368
-      model: cmu
+      # model: cmu
       # img_size: 432x368
 
     display:
