@@ -8,7 +8,7 @@ $ conda activate tf
 $ git clone https://github.com/jasper91937b/Action-Recognition.git
 $ conda install tensorflow  
 
-$ cd Action_Recognition/myapp/Realtime-Action-Recognition-master/src/githubs/githubs   
+$ cd Action_Recognition/myapp/Realtime-Action-Recognition-master/src/githubs 
 $ git clone https://github.com/gsethi2409/tf-pose-estimation.git
 $ cd tf-pose-estimation
 $ pip install -r requirements.txt
