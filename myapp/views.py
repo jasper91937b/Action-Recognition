@@ -54,7 +54,7 @@ run_code = {}
 def predict(request, time=None):
     if time not in run_code.keys():
         run_code[time] = True
-    if request.method == 'POST':
+    if request.method == 'POST' and request.FILES:
         upload = UploadForm(request.POST, request.FILES)
         if upload.is_valid():
             videoinput = request.FILES['file']
@@ -306,3 +306,27 @@ def stop_predict(request, time):
     global run_code
     run_code[time] = False
     return redirect('/action/')
+
+
+from .forms import SendEmailForm
+from django.core.mail import send_mail, BadHeaderError
+from django.contrib import messages
+@csrf_exempt
+def SendEmail(request):
+    if request.method == 'POST':
+        form = SendEmailForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            subject = form.cleaned_data['subject']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            subject = name + "--" + subject
+            try:
+                send_mail(subject, message, email, ['jasper513806@gmail.com'])
+                messages.success(request, name + "感謝你的來信!")
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect('/action/')
+    else:
+        form = SendEmailForm()
+    return render(request, "index.html", {"form":form})
