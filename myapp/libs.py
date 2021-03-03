@@ -52,7 +52,7 @@ class MultiPersonClassifier(object):
         '''
         if len(self.dict_id2clf) == 0:
             return None
-        # if id==min, use the person have lower id
+        # if id==min, 找id最小的人
         if id == 'min':
             id = min(self.dict_id2clf.keys())
         return self.dict_id2clf[id]
@@ -93,7 +93,7 @@ def draw_result_img(img_disp, ith_img, humans, dict_id2skeleton,
             for id, label in dict_id2label.items():
                 skeleton = dict_id2skeleton[id]
                 # scale the y data back to original
-                skeleton[1::2] = skeleton[1::2] / scale_h # y had multiply scale_h when record the skeleton
+                skeleton[1::2] = skeleton[1::2] / scale_h # y 在擷取特徵的時候有乘scale_h，要除回來
                 lib_plot.draw_action_result(img_disp, id, skeleton, label)
         
         # add text "fps"
@@ -102,6 +102,7 @@ def draw_result_img(img_disp, ith_img, humans, dict_id2skeleton,
                     color=(0, 0, 0), thickness=2)
 
         # Draw predicting score for only 1 person
+        # 取最小的id
         if len(dict_id2skeleton):
             classifier_of_a_person = multiperson_classifier.get_classifier(
                 id='min')

@@ -9,5 +9,6 @@ urlpatterns = [
     path("send_data/", views.send_data, name = "data"),
     path("img/<int:time>", views.img, name = "img"),
     path("stoppredict/<int:time>", views.stop_predict, name = "stop"),
+    path("sendemail/", views.SendEmail, name = "email"),
     path('',views.predict, name = "index"),
 ]

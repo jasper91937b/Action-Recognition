@@ -25,8 +25,15 @@ SECRET_KEY = 'q&m10%&#40$qnjvgv3*)gprv=+w_m3mx!3d&5t=cum)19%*usa'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["7501cb2afe08.ngrok.io","localhost"]
 
+# SMTP Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  #SMTP伺服器
+EMAIL_PORT = 587  #TLS通訊埠號
+EMAIL_USE_TLS = True  #開啟TLS(傳輸層安全性)
+EMAIL_HOST_USER = 'jasper513806@gmail.com'
+EMAIL_HOST_PASSWORD = 'vunkwjusjlgtfhjl'
 
 # Application definition
 
@@ -37,12 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp'
+    'myapp',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -50,6 +59,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'Action_Recognition.urls'
 
 TEMPLATES = [
