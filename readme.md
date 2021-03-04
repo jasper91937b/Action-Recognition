@@ -1,5 +1,9 @@
 # Demo
+<<<<<<< HEAD
 ![](https://github.com/jasper91937b/Action-Recognition/blob/master/myapp/static/img/demo.mp4)
+=======
+![](https://github.com/jasper91937b/Action-Recognition/blob/master/demo/demo.gif)
+>>>>>>> 3399be6256647d688d36a914e0eaa2abd035022c
 
 
 
