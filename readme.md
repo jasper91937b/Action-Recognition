@@ -2,7 +2,6 @@
 
 ![](https://github.com/jasper91937b/Action-Recognition/blob/master/demo/demo.gif)
 
-![](https://github.com/jasper91937b/Action-Recognition/blob/master/demo/demo2.gif)
 
 
 
