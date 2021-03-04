@@ -1,3 +1,8 @@
+# Demo
+![](https://github.com/jasper91937b/Action-Recognition/blob/master/myapp/static/img/demo.mp4)
+
+
+
 # Install Dependency
 for python >= 3.6 and tensorflow2.x
 
